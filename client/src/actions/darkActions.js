@@ -1,4 +1,6 @@
- 
+ import {
+  SET_ALERT
+} from './types'
 
 //Set light mode
 export const setLightMode = () => async dispatch => {
@@ -17,22 +19,22 @@ export const setToggle = () => async dispatch => {
 
 //Success Alerts
 export const setSuccessAlerts = (alert) => async dispatch => {
-  dispatch({ type: "SET_ALERT", payload: {msg: alert, severity: 'success', data: true} })
+  dispatch({ type: SET_ALERT, payload: {msg: alert, severity: 'success', data: true} })
 }
 
 //Warning Alerts
 export const setWarningAlerts = (alert) => async dispatch => {
-  dispatch({ type: "SET_ALERT", payload: {msg: alert, severity: 'warning', data: true} })
+  dispatch({ type: SET_ALERT, payload: {msg: alert, severity: 'warning', data: true} })
 }
 
 //Info Alerts
 export const setInfoAlerts = (alert) => async dispatch => {
-  dispatch({ type: "SET_ALERT", payload: {msg: alert, severity: 'info', data: true} })
+  dispatch({ type: SET_ALERT, payload: {msg: alert, severity: 'info', data: true} })
 }
 
 //Info Alerts
 export const setErrorAlerts = (alert) => async dispatch => {
-  dispatch({ type: "SET_ALERT", payload: {msg: alert, severity: 'error', data: true} })
+  dispatch({ type: SET_ALERT, payload: {msg: alert, severity: 'error', data: true} })
 }
 
 

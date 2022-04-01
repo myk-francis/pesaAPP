@@ -15,93 +15,114 @@ import {
   UPDATE_VODA_TRASACTION,
   UPDATE_HALO_TRASACTION,
   UPDATE_AIR_TRASACTION,
-  CLEAR_TRANSACTIONS,
+  AUTH_ERROR,
   SET_LOADING,
-  TRANSACTION_ERROR,
-  SEARCH_TRANSACTIONS
+  UNSET_LOADING,
+  SET_ERROR,
+  SET_ALERT,
+  CLEAR_ERRORS
 } from './types'
 import axios from 'axios'
 
 
+
 export const getCompaniesData = (company) => async dispatch => {
+  dispatch({ type: SET_LOADING })
 
   try {
 
     if (company === 'TIGO') {
-      dispatch({ type: SET_LOADING })
 
       await axios.get('/transactions/data/TIGO')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_TIGO_DATA", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: "SET_TIGO_DATA", payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
     }
 
     if (company === 'VODA') {
-      dispatch({ type: SET_LOADING })
 
       await axios.get('/transactions/data/VODACOM')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_VODA_DATA", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: "SET_VODA_DATA", payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
     }
 
     if (company === 'HALO') {
 
-      dispatch({ type: SET_LOADING })
-
       await axios.get('/transactions/data/HALOTEL')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_HALO_DATA", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: "SET_HALO_DATA", payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
     }
 
     if (company === 'AIR') {
-      dispatch({ type: SET_LOADING })
 
-      await axios.get('/transactions/data/AIRTEL')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_AIR_DATA", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+    await axios.get('/transactions/data/AIRTEL')
+    .then(function (response) {
+      // handle success
+      dispatch({ type: "SET_AIR_DATA", payload: response.data })
+    })
+    .catch(function (error) {
+      // handle error
+      if (error.response.status === 403 || error.response.status === 401) {
+        dispatch({type: AUTH_ERROR, payload: "" })
+        dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+      } else {
+        dispatch({type: SET_ERROR, payload: error.response.data })
+      }
+    })
+    .then(function () {
+      // always executed
+    });
     }
 
   } catch (err) {
     dispatch({
-      type: TRANSACTION_ERROR,
+      type: SET_ERROR,
       payload: err.response.msg
     })
   }
+
+  dispatch({ type: UNSET_LOADING })
 }
 
 
@@ -109,98 +130,96 @@ export const getCompaniesData = (company) => async dispatch => {
 export const getTrasactions = () => async dispatch => {
 
   try {
-      dispatch({ type: SET_LOADING })
+    dispatch({ type: SET_LOADING })
 
-      await axios.get('/transactions/user')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: GET_USER_TRANSACTIONS, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+    await axios.get('/transactions/user')
+    .then(function (response) {
+      // handle success
+      dispatch({ type: GET_USER_TRANSACTIONS, payload: response.data })
+    })
+    .catch(function (error) {
+      // handle error
+      if (error.response.status === 403 || error.response.status === 401) {
+        dispatch({type: AUTH_ERROR, payload: "" })
+        dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+      } else {
+        dispatch({type: SET_ERROR, payload: error.response.data })
+      }
+    })
+    .then(function () {
+      // always executed
+    });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+
+  dispatch({ type: UNSET_LOADING })
 }
 
 export const getCompaniesTrasactions = () => async dispatch => {
+  dispatch({ type: SET_LOADING })
 
   try {
-      dispatch({ type: SET_LOADING })
+    let tigo = '/transactions/TIGO'
+    let voda = '/transactions/VODACOM'
+    let halo = '/transactions/HALOTEL'
+    let air = '/transactions/AIRTEL'
+    let datatable = '/transaction/dash/datatable'
+    let widgets = '/transaction/dash/widgets'
+    let targets = '/transaction/dash/targets'
+    let charts = '/transaction/dash/chart'
 
-      await axios.get('/transactions/TIGO')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_TIGO", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+    const requestTigo = axios.get(tigo)
+    const requestVoda = axios.get(voda)
+    const requestHalo = axios.get(halo)
+    const requestAir = axios.get(air)
+    const requestDatatable = axios.get(datatable)
+    const requestWidgets = axios.get(widgets)
+    const requestTargets = axios.get(targets)
+    const requestCharts = axios.get(charts)
 
-      dispatch({ type: SET_LOADING })
+    axios.all([requestTigo, requestVoda, requestHalo, requestAir, requestDatatable, requestWidgets, requestTargets, requestCharts]).then(axios.spread((...responses) => {
+      const responseTIGO = responses[0]
+      const responseVODA = responses[1]
+      const responesHALO = responses[2]
+      const responesAIR = responses[3]
+      const responesDatatable = responses[4]
+      const responesWidgets = responses[5]
+      const responesTargets = responses[6]
+      const responesCharts = responses[7]
 
-      await axios.get('/transactions/VODACOM')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_VODA", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      dispatch({ type: "SET_TIGO", payload: responseTIGO.data })
+      dispatch({ type: "SET_VODA", payload: responseVODA.data })
+      dispatch({ type: "SET_HALO", payload: responesHALO.data })
+      dispatch({ type: "SET_AIR", payload: responesAIR.data })
+      dispatch({ type: "GET_DAILY_TRANSACTIONS_DATA", payload: responesDatatable.data })
+      dispatch({ type: "GET_WIDGETS_DATA", payload: responesWidgets.data })
+      dispatch({ type: "GET_TARGETS_DATA", payload: responesTargets.data })
+      dispatch({ type: "GET_CHART_DATA", payload: responesCharts.data })
 
-      dispatch({ type: SET_LOADING })
+    })).catch(error => {
+      // react on errors.
+      if (error.response.status === 403 || error.response.status === 401) {
+        dispatch({type: AUTH_ERROR, payload: "" })
+        dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+      } else {
+        dispatch({type: SET_ERROR, payload: error.response.data })
+      }
+    })
 
-      await axios.get('/transactions/HALOTEL')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_HALO", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
-
-      dispatch({ type: SET_LOADING })
-
-      await axios.get('/transactions/AIRTEL')
-        .then(function (response) {
-          // handle success
-          dispatch({ type: "SET_AIR", payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+
+  dispatch({ type: UNSET_LOADING })
 }
 
 
@@ -217,24 +236,30 @@ export const addTigoTransaction = (transaction) => async dispatch => {
 
     try {
       await axios.post('/transaction/create', transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: ADD_TIGO_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: ADD_TIGO_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Add new voda transaction
@@ -251,24 +276,30 @@ export const addVodaTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.post('/transaction/create', transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: ADD_VODA_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: ADD_VODA_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Add new halo transaction
@@ -285,24 +316,30 @@ export const addHaloTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.post('/transaction/create', transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: ADD_HALO_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: ADD_HALO_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Add new airtel transaction
@@ -319,24 +356,30 @@ export const addAirTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.post('/transaction/create', transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: ADD_AIR_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: ADD_AIR_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 
@@ -354,25 +397,31 @@ export const updateTigoTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.put(`/transaction/update/${transaction.id}`, transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: UPDATE_TIGO_TRASACTION, payload: response.data })
-          console.log(response.data)
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: UPDATE_TIGO_TRASACTION, payload: response.data })
+        console.log(response.data)
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Update new voda transaction
@@ -389,24 +438,30 @@ export const updateVodaTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.put(`/transaction/update/${transaction.id}`, transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: UPDATE_VODA_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: UPDATE_VODA_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Update new halo transaction
@@ -423,24 +478,30 @@ export const updateHaloTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.put(`/transaction/update/${transaction.id}`, transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: UPDATE_HALO_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: UPDATE_HALO_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Update new airtel transaction
@@ -457,24 +518,30 @@ export const updateAirTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.put(`/transaction/update/${transaction.id}`, transaction, config)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: UPDATE_AIR_TRASACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: UPDATE_AIR_TRASACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Delete new tigo transaction
@@ -484,24 +551,30 @@ export const deleteTigoTransaction = (transaction) => async dispatch => {
 
     try {
       await axios.delete(`/transaction/delete/id/${transaction.id}/comp_type/${transaction.companytype}`)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: DELETE_TIGO_TRANSACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: DELETE_TIGO_TRANSACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Delete new voda transaction
@@ -511,24 +584,30 @@ export const deleteVodaTransaction = (transaction) => async dispatch => {
 
     try {
       await axios.delete(`/transaction/delete/id/${transaction.id}/comp_type/${transaction.companytype}`)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: DELETE_VODA_TRANSACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: DELETE_VODA_TRANSACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Delete new halo transaction
@@ -539,24 +618,30 @@ export const deleteHaloTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.delete(`/transaction/delete/id/${transaction.id}/comp_type/${transaction.companytype}`)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: DELETE_HALO_TRANSACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: DELETE_HALO_TRANSACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Delete new airtel transaction
@@ -567,24 +652,30 @@ export const deleteAirTransaction = (transaction) => async dispatch => {
     try {
 
       await axios.delete(`/transaction/delete/id/${transaction.id}/comp_type/${transaction.companytype}`)
-        .then(function (response) {
-          // handle success
-          dispatch({ type: DELETE_AIR_TRANSACTION, payload: response.data })
-        })
-        .catch(function (error) {
-          // handle error
-          dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-        })
-        .then(function () {
-          // always executed
-        });
+      .then(function (response) {
+        // handle success
+        dispatch({ type: DELETE_AIR_TRANSACTION, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
+      })
+      .then(function () {
+        // always executed
+      });
 
     } catch (err) {
       dispatch({
-        type: TRANSACTION_ERROR,
+        type: SET_ERROR,
         payload: err.response.msg
       })
     }
+  dispatch({ type: UNSET_LOADING })
 }
 
 
@@ -603,86 +694,7 @@ export const clearCurrentTransaction = () => {
   }
 }
 
-//Get widgets data for specific user
-export const getWidgetsData = () => async dispatch => {
 
-  try {
-    dispatch({ type: SET_LOADING })
-
-    await axios.get('/transaction/dash/widgets')
-      .then(function (response) {
-        // handle success
-        dispatch({ type: "GET_WIDGETS_DATA", payload: response.data })
-      })
-      .catch(function (error) {
-        // handle error
-        dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-      })
-      .then(function () {
-        // always executed
-      });
-
-  } catch (err) {
-    dispatch({
-      type: TRANSACTION_ERROR,
-      payload: err.response.msg
-    })
-  }
-}
-
-//Get Targets data for specific user
-export const getTargetsData = () => async dispatch => {
-
-  try {
-    dispatch({ type: SET_LOADING })
-
-    await axios.get('/transaction/dash/targets')
-      .then(function (response) {
-        // handle success
-        dispatch({ type: "GET_TARGETS_DATA", payload: response.data })
-      })
-      .catch(function (error) {
-        // handle error
-        dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-      })
-      .then(function () {
-        // always executed
-      });
-
-  } catch (err) {
-    dispatch({
-      type: TRANSACTION_ERROR,
-      payload: err.response.msg
-    })
-  }
-}
-
-//Get Chart data for specific user
-export const getChartData = () => async dispatch => {
-
-  try {
-    dispatch({ type: SET_LOADING })
-
-    await axios.get('/transaction/dash/chart')
-      .then(function (response) {
-        // handle success
-        dispatch({ type: "GET_CHART_DATA", payload: response.data })
-      })
-      .catch(function (error) {
-        // handle error
-        dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-      })
-      .then(function () {
-        // always executed
-      });
-
-  } catch (err) {
-    dispatch({
-      type: TRANSACTION_ERROR,
-      payload: err.response.data
-    })
-  }
-}
 
 //Get Chart data for specific user
 export const getUserChartData = (id) => async dispatch => {
@@ -697,7 +709,12 @@ export const getUserChartData = (id) => async dispatch => {
       })
       .catch(function (error) {
         // handle error
-        dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
       })
       .then(function () {
         // always executed
@@ -705,10 +722,11 @@ export const getUserChartData = (id) => async dispatch => {
 
   } catch (err) {
     dispatch({
-      type: TRANSACTION_ERROR,
+      type: SET_ERROR,
       payload: err.response.data
     })
   }
+  dispatch({ type: UNSET_LOADING })
 }
 
 //Get datatable data for specific user
@@ -724,7 +742,12 @@ export const getUserDatatableData = (id) => async dispatch => {
       })
       .catch(function (error) {
         // handle error
-        dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
+        if (error.response.status === 403 || error.response.status === 401) {
+          dispatch({type: AUTH_ERROR, payload: "" })
+          dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+        } else {
+          dispatch({type: SET_ERROR, payload: error.response.data })
+        }
       })
       .then(function () {
         // always executed
@@ -732,38 +755,16 @@ export const getUserDatatableData = (id) => async dispatch => {
 
   } catch (err) {
     dispatch({
-      type: TRANSACTION_ERROR,
+      type: SET_ERROR,
       payload: err.response.msg
     })
   }
+  dispatch({ type: UNSET_LOADING })
 }
 
-//Get Daily Transactions data for specific user
-export const getDailyTransactionsData = () => async dispatch => {
 
-  try {
-    dispatch({ type: SET_LOADING })
-
-    await axios.get('/transaction/dash/datatable')
-      .then(function (response) {
-        // handle success
-        dispatch({ type: "GET_DAILY_TRANSACTIONS_DATA", payload: response.data })
-      })
-      .catch(function (error) {
-        // handle error
-        dispatch({type: TRANSACTION_ERROR, payload: error.response.data })
-      })
-      .then(function () {
-        // always executed
-      });
-
-  } catch (err) {
-    dispatch({
-      type: TRANSACTION_ERROR,
-      payload: err.response.msg
-    })
-  }
-}
+//Clear Errors
+export const clearErrors = () => async dispatch =>  dispatch({ type : CLEAR_ERRORS }) 
 
 
 

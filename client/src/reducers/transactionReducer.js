@@ -14,10 +14,6 @@ import {
   UPDATE_VODA_TRASACTION,
   UPDATE_HALO_TRASACTION,
   UPDATE_AIR_TRASACTION,
-  CLEAR_TRANSACTIONS,
-  SET_TRANSACTION_LOADING,
-  TRANSACTION_ERROR,
-  SEARCH_TRANSACTIONS
 } from '../actions/types'
 
 const initalState = {
@@ -37,8 +33,7 @@ const initalState = {
   voda_data: null,
   halo_data: null,
   air_data: null,
-  loading: false,
-  error: null
+  isAuthenticated: null
 }
 
 /* eslint import/no-anonymous-default-export: [2, {"allowArrowFunction": true}] */
@@ -47,206 +42,165 @@ export default (state = initalState, action) => {
     case GET_USER_TRANSACTIONS:
       return {
         ...state, 
-        user: action.payload,
-        loading: false
+        user: action.payload
       }
     case "SET_TIGO_DATA":
       return {
         ...state, 
-        tigo_data: action.payload,
-        loading: false
+        tigo_data: action.payload
       }
     case "SET_VODA_DATA":
       return {
         ...state, 
-        voda_data: action.payload,
-        loading: false
+        voda_data: action.payload
       }
     case "SET_HALO_DATA":
       return {
         ...state, 
-        halo_data: action.payload,
-        loading: false
+        halo_data: action.payload
       }
     case "SET_AIR_DATA":
       return {
         ...state, 
-        air_data: action.payload,
-        loading: false
+        air_data: action.payload
       }
     case "SET_TIGO":
       return {
         ...state, 
-        tigo_transactions: action.payload,
-        loading: false
+        tigo_transactions: action.payload
       }
     case "SET_VODA":
       return {
         ...state, 
-        voda_transactions: action.payload,
-        loading: false
+        voda_transactions: action.payload
       }
     case "SET_HALO":
       return {
         ...state, 
-        halo_transactions: action.payload,
-        loading: false
+        halo_transactions: action.payload
       }
     case "SET_AIR":
       return {
         ...state, 
-        air_transactions: action.payload,
-        loading: false
+        air_transactions: action.payload
       }
     case ADD_TIGO_TRASACTION:
       return {
         ...state, 
-        tigo_transactions: [ action.payload, ...state.tigo_transactions ],
-        loading: false
+        tigo_transactions: [ action.payload, ...state.tigo_transactions ]
       }
     case ADD_VODA_TRASACTION:
       return {
         ...state, 
-        voda_transactions: [ action.payload, ...state.voda_transactions ],
-        loading: false
+        voda_transactions: [ action.payload, ...state.voda_transactions ]
       }
     case ADD_HALO_TRASACTION:
       return {
         ...state, 
-        halo_transactions: [ action.payload, ...state.halo_transactions ],
-        loading: false
+        halo_transactions: [ action.payload, ...state.halo_transactions ]
       }
     case ADD_AIR_TRASACTION:
       return {
         ...state, 
-        air_transactions: [ action.payload, ...state.air_transactions ],
-        loading: false
+        air_transactions: [ action.payload, ...state.air_transactions ]
       }
     
     case UPDATE_TIGO_TRASACTION:
       return {
         ...state, 
-        tigo_transactions: state.tigo_transactions.map(tigo => tigo.id === action.payload.id ? action.payload : tigo),
-        loading: false
+        tigo_transactions: state.tigo_transactions.map(tigo => tigo.id === action.payload.id ? action.payload : tigo)
       }
 
     case UPDATE_VODA_TRASACTION:
       return {
         ...state, 
-        voda_transactions: state.voda_transactions.map(voda => voda.id === action.payload.id ? action.payload : voda),
-        loading: false
+        voda_transactions: state.voda_transactions.map(voda => voda.id === action.payload.id ? action.payload : voda)
       }
 
     case UPDATE_HALO_TRASACTION:
       return {
         ...state, 
-        halo_transactions: state.halo_transactions.map(halo => halo.id === action.payload.id ? action.payload : halo),
-        loading: false
+        halo_transactions: state.halo_transactions.map(halo => halo.id === action.payload.id ? action.payload : halo)
       }
 
     case UPDATE_AIR_TRASACTION:
       return {
         ...state, 
-        air_transactions: state.air_transactions.map(air => air.id === action.payload.id ? action.payload : air),
-        loading: false
+        air_transactions: state.air_transactions.map(air => air.id === action.payload.id ? action.payload : air)
       }
 
     case DELETE_TIGO_TRANSACTION:
       return {
         ...state, 
-        tigo_transactions: state.tigo_transactions.map(tigo => tigo.id === action.payload.id ? action.payload : tigo),
+        tigo_transactions: state.tigo_transactions.map(tigo => tigo.id === action.payload.id ? action.payload : tigo)
         // tigo_transactions: state.tigo_transactions.map(tigo => tigo.id === action.payload.id ? Object.assign({}, tigo, {status: "Deleted"}) : tigo),
-        loading: false
       }
 
     case DELETE_VODA_TRANSACTION:
       return {
         ...state, 
-        voda_transactions: state.voda_transactions.map(voda => voda.id === action.payload.id ? action.payload : voda),
-        loading: false
+        voda_transactions: state.voda_transactions.map(voda => voda.id === action.payload.id ? action.payload : voda)
       }
 
     case DELETE_HALO_TRANSACTION:
       return {
         ...state, 
-        halo_transactions: state.halo_transactions.map(halo => halo.id === action.payload.id ? action.payload : halo),
-        loading: false
+        halo_transactions: state.halo_transactions.map(halo => halo.id === action.payload.id ? action.payload : halo)
       }
 
     case DELETE_AIR_TRANSACTION:
       return {
         ...state, 
-        air_transactions: state.air_transactions.map(air => air.id === action.payload.id ? action.payload : air),
-        loading: false
+        air_transactions: state.air_transactions.map(air => air.id === action.payload.id ? action.payload : air)
       }
     case SET_CURRENT_TRASACTION:
       return {
         ...state, 
-        current_transaction: action.payload,
-        loading: false
+        current_transaction: action.payload
       }
     
     case CLEAR_CURRENT_TRANSACTION:
       return {
         ...state, 
-        current_transaction: null,
-        loading: false
+        current_transaction: null
       }
 
     case "GET_WIDGETS_DATA":
       return {
         ...state, 
-        widgets: action.payload,
-        loading: false
+        widgets: action.payload
       }
 
     case "GET_TARGETS_DATA":
       return {
         ...state, 
-        targets: action.payload,
-        loading: false
+        targets: action.payload
       }
     
     case "GET_CHART_DATA":
       return {
         ...state, 
-        chart: action.payload,
-        loading: false
+        chart: action.payload
       }
 
     case "GET_USER_CHART_DATA":
       return {
         ...state, 
-        user_chart: action.payload,
-        loading: false
+        user_chart: action.payload
       }
 
     case "GET_USER_DATATABLE":
       return {
         ...state, 
-        user_datatable: action.payload,
-        loading: false
+        user_datatable: action.payload
       }
     
     case "GET_DAILY_TRANSACTIONS_DATA":
       return {
         ...state, 
-        table: action.payload,
-        loading: false
+        table: action.payload
       }
 
-    case SET_TRANSACTION_LOADING:
-      return {
-        ...state,
-        loading: true
-      }
-
-    case TRANSACTION_ERROR:
-      console.error(action.payload)
-      return {
-        ...state,
-        error: action.payload
-      }
     default: 
       return {
       ...state

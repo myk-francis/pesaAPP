@@ -5,6 +5,8 @@ import {
   LOGIN_FAIL,
   CLEAR_ERRORS,
   SET_LOADING,
+  UNSET_LOADING,
+  SET_ERROR,
   LOGOUT
 } from '../actions/types'
 
@@ -36,7 +38,7 @@ export default (state = initialState, action) => {
         ...state, 
         token: localStorage.getItem('token'), 
         isAuthenticated: null,
-        loading: true,
+        loading: false,
         error: action.payload,
         user: null
       }
@@ -52,10 +54,20 @@ export default (state = initialState, action) => {
         ...state,
         error: null
       }
+    case SET_ERROR:
+      return {
+        ...state,
+        error: action.payload
+      }
     case SET_LOADING: 
       return {
         ...state ,  
         loading : true
+      };
+    case UNSET_LOADING: 
+      return {
+        ...state ,  
+        loading : false
       };
     default:
       return state

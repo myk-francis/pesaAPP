@@ -4,6 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import MoneyIcon from '@mui/icons-material/Money';
 import { Link } from "react-router-dom";
 
+
 const Widget = ({ percent ,amount, type }) => {
   let data;
 

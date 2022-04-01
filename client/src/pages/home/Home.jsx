@@ -5,22 +5,18 @@ import Widget from "../../components/widget/Widget";
 import Featured from "../../components/featured/Featured";
 import Chart from "../../components/chart/Chart";
 import Table from "../../components/table/Table";
-import { useEffect } from "react";
-import { getChartData, getTargetsData, getWidgetsData, getDailyTransactionsData, getCompaniesTrasactions } from '../../actions/transactionActions'
+import { useEffect, useRef } from "react";
+import { getCompaniesTrasactions } from '../../actions/transactionActions'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 
-const Home = ({ chart, widgets, getChartData, getTargetsData, getWidgetsData, getDailyTransactionsData, getCompaniesTrasactions }) => {
+const Home = ({ chart, widgets, getCompaniesTrasactions }) => {
+
 
   useEffect(() => {
-
     getCompaniesTrasactions()
-    getDailyTransactionsData()
-    getWidgetsData()
-    getTargetsData()
-    getChartData()
-
   }, [])
+
 
   return (
     <div className="home">
@@ -49,10 +45,6 @@ const Home = ({ chart, widgets, getChartData, getTargetsData, getWidgetsData, ge
 
 Home.propTypes = {
   getCompaniesTrasactions : PropTypes.func.isRequired,
-  getDailyTransactionsData : PropTypes.func.isRequired,
-  getTargetsData : PropTypes.func.isRequired,
-  getWidgetsData : PropTypes.func.isRequired,
-  getChartData : PropTypes.func.isRequired,
   widgets : PropTypes.array,
   chart : PropTypes.array
 }
@@ -62,4 +54,4 @@ const mapStateToProps = state => ({
   chart : state.transactions.chart
 })
 
-export default connect(mapStateToProps, { getChartData, getTargetsData, getWidgetsData, getDailyTransactionsData, getCompaniesTrasactions })(Home)
+export default connect(mapStateToProps, { getCompaniesTrasactions })(Home)

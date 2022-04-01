@@ -10,15 +10,18 @@ import {
 import PropTypes from 'prop-types'
 
 const data = [
-  { name: "January", tigo: 1200, voda: 500, halo: 900, airtle: 500 },
-  { name: "February", Tigo: 2100, Voda: 1200, Halo: 600, Airtel: 400 },
-  { name: "March", Tigo: 800, Voda: 1000, Halo: 1500, Airtel: 600 },
-  { name: "April", Tigo: 1600, Voda: 1100, Halo: 900, Airtel: 500 },
-  { name: "May", Tigo: 900, Voda: 1200, Halo: 500, Airtel: 400 },
-  { name: "June", Tigo: 1700, Voda: 800, Halo: 1200, Airtel: 900 },
+  { name: "January", tigo: 1200, voda: 500, halo: 900, airtel: 500 },
+  { name: "February", tigo: 2100, voda: 1200, halo: 600, airtel: 400 },
+  { name: "March", tigo: 800, voda: 1000, halo: 1500, airtel: 600 },
+  { name: "April", tigo: 1600, voda: 1100, halo: 900, airtel: 500 },
+  { name: "May", tigo: 900, voda: 1200, halo: 500, airtel: 400 },
+  { name: "June", tigo: 1700, voda: 800, halo: 1200, airtel: 900 },
 ];
 
 const Chart = ({ aspect, title, chart }) => {
+
+  let newArray = chart.map(obj => Object.assign({}, obj, {tigo: parseInt(obj.tigo), voda: parseInt(obj.voda), halo: parseInt(obj.halo), airtel: parseInt(obj.airtel)}))
+  
   return (
     <div className="chart">
       <div className="title">{title}</div>
@@ -26,7 +29,8 @@ const Chart = ({ aspect, title, chart }) => {
         <AreaChart
           width={730}
           height={250}
-          data={chart[0]}
+          data={newArray}
+          // data={data}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>
@@ -52,28 +56,28 @@ const Chart = ({ aspect, title, chart }) => {
           <Tooltip />
           <Area
             type="monotone"
-            dataKey="Tigo"
+            dataKey="tigo"
             stroke="#8884d8"
             fillOpacity={1}
             fill="url(#tigo)"
           />
           <Area
             type="monotone"
-            dataKey="Voda"
+            dataKey="voda"
             stroke="#ff7f7f"
             fillOpacity={1}
             fill="url(#voda)"
           />
           <Area
             type="monotone"
-            dataKey="Halo"
+            dataKey="halo"
             stroke="#ffd580"
             fillOpacity={1}
             fill="url(#halo)"
           />
           <Area
             type="monotone"
-            dataKey="Airtel"
+            dataKey="airtel"
             stroke="#82ca9d"
             fillOpacity={1}
             fill="url(#airtel)"

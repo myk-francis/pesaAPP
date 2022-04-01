@@ -75,7 +75,7 @@ router.post('/', async (req: any, res: any) => {
     }
 
     jwt.sign(payload, process.env.jwtSecret, {
-      expiresIn: 7200 //60*60*2
+      expiresIn: 60 //60*60*2 = 7200
     }, (err: any, token: any) => {
       if (err) {
         throw err

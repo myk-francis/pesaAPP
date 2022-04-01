@@ -5,6 +5,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  SET_ALERT,
   CLEAR_ERRORS
 } from '../actions/types'
 
@@ -12,16 +13,31 @@ import setAuthToken from './setAuthToken'
 import axios from 'axios'
 
 //Load User
-export  const loadUser = () => async dispatch => {
+export const loadUser = () => async dispatch => {
     //@Load token to global headers
     if (localStorage.token) {
       setAuthToken(localStorage.token)
     } 
 
     try {
-      const res = await axios.get('/auth')
 
-      dispatch({ type: USER_LOADED, payload: res.data })
+      await axios.get('/auth')
+      .then(function (response) {
+        // handle success
+        dispatch({ type: USER_LOADED, payload: response.data })
+      })
+      .catch(function (error) {
+        // handle error
+        if (error.response.status === 403 || error.response.status === 401) {
+            dispatch({type: AUTH_ERROR, payload: "" })
+            dispatch({ type: SET_ALERT, payload: {msg: "Session Ended, Please Log in", severity: 'error', data: true} })
+          } else {
+            dispatch({type: LOGOUT, payload: error.response.data })
+          }
+      })
+      .then(function () {
+        // always executed
+      });
     } catch (err) {
       dispatch({ type: AUTH_ERROR, payload: err.response.data.msg })
     }

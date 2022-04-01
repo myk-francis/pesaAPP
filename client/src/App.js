@@ -16,10 +16,14 @@ import Alerts from "./components/layout/Alerts";
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import PrivateRoute from './components/routing/PrivateRoute'
+import {loadUser} from './actions/authActions'
+import React, { useEffect } from 'react'
 
+function App({darkMode, loadUser}) {
 
-
-function App({darkMode}) {
+  useEffect(() => {
+    loadUser()
+  }, [])
 
   return (
     <div className={darkMode.darkMode ? "app dark" : "app"}>
@@ -66,4 +70,4 @@ const mapStateToProps = state => ({
   darkMode : state.darkMode
 })
 
-export default connect(mapStateToProps)(App)
+export default connect(mapStateToProps, { loadUser })(App)

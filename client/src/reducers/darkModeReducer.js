@@ -1,4 +1,8 @@
-
+import {
+  SET_ALERT
+} from '../actions/types'
+ 
+ 
  const initialState = { 
    darkMode: false,
    alerts: null
@@ -24,7 +28,7 @@ export default (state = initialState, action) => {
         darkMode : !state.darkMode 
       };
     
-    case "SET_ALERT": 
+    case SET_ALERT: 
       return {
         ...state ,  
         alerts : action.payload 
